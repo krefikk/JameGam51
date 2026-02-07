@@ -12,10 +12,10 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private int penaltyPerMine = 250;
 
     [Header("Risk Multipliers")]
-    [Tooltip("Can azaldýðýnda puan artýþ hýzý kaç katýna çýksýn?")]
+    [Tooltip("When health decreases, how many times faster should the point gain rate increase ?")]
     [SerializeField] private float maxHealthMultiplier = 3f;
 
-    [Tooltip("Oksijen azaldýðýnda puan artýþ hýzý kaç katýna çýksýn?")]
+    [Tooltip("How many times faster should the score increase rate become when oxygen decreases ?")]
     [SerializeField] private float maxOxygenMultiplier = 2f;
 
     private float survivalScore;
