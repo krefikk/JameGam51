@@ -5,6 +5,7 @@ public class PlayerState : MonoBehaviour
 {
     [Header("References")]
     private Animator anim;
+    private InGameManager inGameManager;
 
     [ShowNonSerializedField] internal bool thrusting = false;
     [ShowNonSerializedField] internal bool invinsible = false;
@@ -19,6 +20,7 @@ public class PlayerState : MonoBehaviour
     private void Awake()
     {
         anim = GetComponent<Animator>();
+        inGameManager = FindFirstObjectByType<InGameManager>();
     }
 
     private void OnEnable()
@@ -37,6 +39,9 @@ public class PlayerState : MonoBehaviour
 
     private void Update()
     {
+        if (dead || inGameManager.paused)
+            return;
+
         anim.SetBool("Thrust", thrusting);
     }
 

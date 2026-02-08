@@ -57,6 +57,9 @@ public class ScoreManager : MonoBehaviour
         int bubbleBonus = state.BubblesPopped * pointsPerBubble;
         int minePenalty = state.MinesExploded * penaltyPerMine;
 
+        if (survivalScore == 0)
+            CalculateSurvivalScore();
+
         float finalScore = survivalScore + bubbleBonus - minePenalty;
         return Mathf.Max(0, Mathf.RoundToInt(finalScore));
     }

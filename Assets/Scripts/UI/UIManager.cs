@@ -108,7 +108,7 @@ public class UIManager : MonoBehaviour
         timerMesh.text = SecondsToMinute(timer);
     }
 
-    private string SecondsToMinute(float seconds)
+    public string SecondsToMinute(float seconds)
     {
         if (seconds < 0) 
             seconds = 0;
