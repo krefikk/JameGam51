@@ -42,6 +42,10 @@ public class PlayerStats : MonoBehaviour
     public Action onDiverGetBubble;
     public Action onDiverExplodedMine;
 
+    ///
+    private GameplayAudio gameplayAudio;
+    ///
+
     private void Awake()
     {
         state = GetComponent<PlayerState>();
@@ -137,6 +141,15 @@ public class PlayerStats : MonoBehaviour
         state.dead = true;
         health = 0;
         onDiverDie?.Invoke();
+
+        //
+        GameplayAudio gameplayAudio = FindFirstObjectByType<GameplayAudio>();
+        if (gameplayAudio != null)
+        {
+            gameplayAudio.PlayPlayerDead();
+        }
+        //
+
     }
 
     private void HitStopTime(float delay)

@@ -20,7 +20,7 @@ public class GameplayAudio : MonoBehaviour
     [SerializeField] private AudioClip[] playerDamage;
     [SerializeField] private AudioClip fishSwim;
     [SerializeField] private AudioClip[] bubbleCollect;
-    [SerializeField] private AudioClip bomb;
+    [SerializeField] private AudioClip mine;
     [SerializeField] private AudioClip heartbeat;
 
     [Header("UI SFX")]
@@ -28,7 +28,8 @@ public class GameplayAudio : MonoBehaviour
     [SerializeField] private AudioClip buttonClick;
 
     private Dictionary<Fish, AudioSource> fishAudioSources = new Dictionary<Fish, AudioSource>();
-    private int lastDamageIndex = -1; // ← AGREGAR
+    private int lastDamageIndex = -1;
+    private int lastBubbleIndex = -1;
 
     private void Start()
     {
@@ -98,18 +99,16 @@ public class GameplayAudio : MonoBehaviour
             if (AudioManager.master.SFX.pausableSource == null)
             {
                 AudioManager.master.SFX.PlayPausable(playerSwim);
-                AudioManager.master.SFX.UnPausePausable();
             }
-            else
-            {
-                AudioManager.master.SFX.UnPausePausable();
-            }
+            
+            AudioManager.master.SFX.UnPausePausable();
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
             AudioManager.master.SFX.PausePausable();
         }
+
     }
 
     public void PlayPlayerDamage()
@@ -135,5 +134,44 @@ public class GameplayAudio : MonoBehaviour
         }
 
         AudioManager.master.SFX.Play(playerDamage[randomIndex]);
+    }
+
+        public void PlayBubbleCollect()
+    {
+        if (bubbleCollect == null || bubbleCollect.Length == 0) return;
+        if (AudioManager.master == null) return;
+
+        int randomIndex;
+
+        if (bubbleCollect.Length > 1)
+        {
+            do
+            {
+                randomIndex = Random.Range(0, bubbleCollect.Length);
+            }
+            while (randomIndex == lastBubbleIndex);
+
+            lastBubbleIndex = randomIndex;
+        }
+        else
+        {
+            randomIndex = 0;
+        }
+
+        AudioManager.master.SFX.Play(bubbleCollect[randomIndex]);
+    }
+
+        public void PlayMineExplosion()
+    {
+        AudioManager.master.SFX.Play(mine);
+
+    }
+
+    public void PlayPlayerDead()
+    {
+        if (playerDead != null && AudioManager.master != null)
+        {
+            AudioManager.master.SFX.Play(playerDead);
+        }
     }
 }

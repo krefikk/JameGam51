@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public struct FishSpawnRequest
@@ -56,11 +57,23 @@ public class FishSpawner : MonoBehaviour
     [SerializeField] private float midFishSpawnWaitTime = 2.2f;
     [SerializeField] private float hardFishSpawnWaitTime = 1.2f;
 
+
+    ///
+    [Header("Audio")]
+    [SerializeField] private AudioClip warningSound;
+    private SFXManager sfx;
+    ///
+
+
     private bool spawningFishes = false;
 
     private void Awake()
     {
         state = FindFirstObjectByType<PlayerState>();
+        ///
+        sfx = FindFirstObjectByType<SFXManager>();
+        ///
+
     }
 
     private void Update()
@@ -258,13 +271,24 @@ public class FishSpawner : MonoBehaviour
                 Vector2 spawnPos = new Vector2(leftSideIndicatorMeridian.position.x, fish.transform.position.y);
                 GameObject indicatorObj = Instantiate(indicator, spawnPos, Quaternion.identity);
                 indicators.Add(indicatorObj);
+
+                //
+                AudioManager.master.SFX.Play(warningSound, indicatorObj.transform.position);
+                //
+
             }
             else
             {
                 Vector2 spawnPos = new Vector2(rightSideIndicatorMeridian.position.x, fish.transform.position.y);
                 GameObject indicatorObj = Instantiate(indicator, spawnPos, Quaternion.identity);
                 indicators.Add(indicatorObj);
+
+                //
+                AudioManager.master.SFX.Play(warningSound, indicatorObj.transform.position);
+                //
+
             }
+
         }
 
         return indicators;
