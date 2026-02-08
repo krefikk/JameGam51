@@ -1659,7 +1659,8 @@ MonoBehaviour:
   rightSideIndicatorMeridian: {fileID: 215189974}
   leftSideIndicatorMeridian: {fileID: 1236291895}
   minimumYPadding: 1.4
-  timeToMaxDifficulty: 900
+  timeToMaxDifficulty: 600
+  maxFishCount: 7
   startMoveSpeed: 5
   endMoveSpeed: 7
   startTurnSpeed: 0.5
@@ -4121,6 +4122,7 @@ MonoBehaviour:
   maxBubbleSpawnWidth: {fileID: 2015504789}
   minBubbleSpawnWidth: {fileID: 762214139}
   collectableSpawnHeight: {fileID: 2015504789}
+  timeToMaxDifficulty: 360
   minWaitTimeBetweenMineSpawns: 3.5
   maxWaitTimeBetweenMineSpawns: 25
   minWaitTimeBetweenBubbleSpawns: 5

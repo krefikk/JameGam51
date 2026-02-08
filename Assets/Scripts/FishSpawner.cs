@@ -38,6 +38,8 @@ public class FishSpawner : MonoBehaviour
     [SerializeField] private float timeToMaxDifficulty = 900f;
     private float currentGameTime = 0f;
 
+    [SerializeField] private int maxFishCount = 7;
+
     [SerializeField] private float startMoveSpeed = 5f;
     [SerializeField] private float endMoveSpeed = 7f;
 
@@ -99,15 +101,23 @@ public class FishSpawner : MonoBehaviour
 
     private int DetermineAmount(float progress)
     {
-        int baseAmount = Mathf.RoundToInt(Mathf.Lerp(2, 5, progress));
+        float rawAmount = Mathf.Lerp(2, maxFishCount, progress);
+        int finalAmount = Mathf.RoundToInt(rawAmount);
 
-        if (progress < 0.2f)
+        if (progress > 0.1f)
         {
-            if (Random.value < 0.2f)
-                return 1;
+            float noise = Random.value;
+            if (noise > 0.7f) finalAmount++;
+            else if (noise < 0.2f) finalAmount--;
         }
 
-        return baseAmount;
+        if (progress < 0.08f)
+        {
+            if (Random.value < 0.4f) return 1;
+        }
+
+        int absoluteMin = (progress < 0.1f) ? 1 : 2;
+        return Mathf.Clamp(finalAmount, absoluteMin, maxFishCount);
     }
 
     private int DetermineDifficulty(float progress)

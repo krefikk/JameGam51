@@ -29,6 +29,9 @@ public class CollectableSpawner : MonoBehaviour
 
     [SerializeField] private Transform collectableSpawnHeight;
 
+    [SerializeField] private float timeToMaxDifficulty = 360f;
+    private float currentDifficultyTime = 0f;
+
     [SerializeField] private float minWaitTimeBetweenMineSpawns = 3.5f;
     [SerializeField] private float maxWaitTimeBetweenMineSpawns = 25f;
 
@@ -59,6 +62,9 @@ public class CollectableSpawner : MonoBehaviour
         if (state.dead)
             return;
 
+        if (currentDifficultyTime < timeToMaxDifficulty)
+            currentDifficultyTime += Time.deltaTime;
+
         RefreshQueues();
         SpawnMechanism();
         IncreaseChancesOverTime();
@@ -78,7 +84,10 @@ public class CollectableSpawner : MonoBehaviour
         spawningBubble = true;
         SpawnRandomBubble();
 
-        float randomWaitTime = Random.Range(minWaitTimeBetweenBubbleSpawns, maxWaitTimeBetweenBubbleSpawns);
+        float ratio = Mathf.Clamp01(currentDifficultyTime / timeToMaxDifficulty);
+        float dynamicMinWait = Mathf.Lerp(minWaitTimeBetweenBubbleSpawns, maxWaitTimeBetweenBubbleSpawns, ratio);
+
+        float randomWaitTime = Random.Range(dynamicMinWait, maxWaitTimeBetweenBubbleSpawns);
         yield return new WaitForSeconds(randomWaitTime);
 
         spawningBubble = false;
@@ -89,7 +98,10 @@ public class CollectableSpawner : MonoBehaviour
         spawningMine = true;
         SpawnRandomMine();
 
-        float randomWaitTime = Random.Range(minWaitTimeBetweenMineSpawns, maxWaitTimeBetweenMineSpawns);
+        float ratio = Mathf.Clamp01(currentDifficultyTime / timeToMaxDifficulty);
+        float dynamicMaxWait = Mathf.Lerp(maxWaitTimeBetweenMineSpawns, minWaitTimeBetweenMineSpawns, ratio);
+
+        float randomWaitTime = Random.Range(minWaitTimeBetweenMineSpawns, dynamicMaxWait);
         yield return new WaitForSeconds(randomWaitTime);
 
         spawningMine = false;
