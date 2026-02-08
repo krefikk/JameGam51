@@ -12451,7 +12451,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   thrustInput: {fileID: 934682634703997579, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  thrustForce: 0.01
+  thrustForce: 5
   frictionCoef: 0.01
   maxRotateSpeed: 75
   rotationAcceleration: 150

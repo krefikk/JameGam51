@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Force")]
     [SerializeField] private float thrustForce = 5f;
-    [SerializeField][Range(0.01f, 1f)] private float frictionCoef = 0.9f;
+    [SerializeField][Range(0.01f, 1f)] private float frictionCoef = 0.01f;
 
     [Header("Rotation")]
     [SerializeField] private float maxRotateSpeed = 150f;
@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Bubble Particles")]
     [SerializeField] private ParticleSystem thrustBubbles;
+
+    private bool isThrusting = false;
 
     private void Awake()
     {
@@ -61,20 +63,71 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        HandleInputAndRotation();
+        HandleInput();
+        CalculateRotation();
         HandleThrustEffects();
     }
 
     private void FixedUpdate()
     {
-        if (!state.thrusting)
+        ApplyPhysics();
+        ApplyRotation();
+    }
+
+    private void CalculateRotation()
+    {
+        // Hedef dönüþ hýzýna yumuþak geçiþ hesaplamasý (Görsel akýcýlýk için Update'te kalabilir)
+        currentRotateSpeed = Mathf.MoveTowards(currentRotateSpeed, targetRotateSpeed, rotationAcceleration * Time.deltaTime);
+    }
+
+    private void ApplyRotation()
+    {
+        // Dönüþ fiziði
+        rb.angularVelocity = 0;
+        // MoveRotation veya Rotate kullanabiliriz, Rotate daha basittir
+        transform.Rotate(0, 0, currentRotateSpeed * Time.fixedDeltaTime);
+    }
+
+    private void HandleInput()
+    {
+        if (state.dead) return;
+
+        // Tuþa basýlýyor mu bilgisini alýyoruz
+        isThrusting = thrustInput.action.IsPressed();
+
+        if (isThrusting)
         {
-            rb.linearVelocity = rb.linearVelocity * (1 - frictionCoef);
+            state.thrusting = true;
+            targetRotateSpeed = 0f;
+            GenerateContinuousNoise();
+        }
+        else
+        {
+            state.thrusting = false;
+            currentNoiseRadius = minNoiseRadius;
+            targetRotateSpeed = maxRotateSpeed * rotationDirection;
+        }
+    }
+
+    private void ApplyPhysics()
+    {
+        if (state.dead) return;
+
+        if (state.thrusting)
+        {
+            // ForceMode2D.Force kullanýyoruz. Bu sürekli itiþ gücüdür.
+            // Time.deltaTime ile çarpmana gerek yok, fizik motoru halleder.
+            rb.AddForce(-transform.right * thrustForce, ForceMode2D.Force);
+        }
+        else
+        {
+            // Manuel sürtünme (Eðer Rigidbody linearDamping kullanmýyorsan)
+            // 1 - frictionCoef mantýðýyla hýz azaltma
+            rb.linearVelocity = rb.linearVelocity * (1f - frictionCoef);
+
             if (rb.linearVelocity.magnitude < 0.1f)
                 rb.linearVelocity = Vector2.zero;
         }
-
-        Rotate();
     }
 
     private void HandleInputAndRotation()
