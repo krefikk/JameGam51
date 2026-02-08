@@ -107,8 +107,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   turnSpeed: 0.5
-  targetDistanceThreshold: 5
+  targetDistanceThreshold: 2.25
   maxTurnAngle: 90
+  determineRandomly: 1
   waveFrequency: 20
   waveAmplitude: 5
   direction: {x: 1, y: 0, z: 0}
@@ -171,7 +172,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.0010883138, y: -0.0065292045}
+  m_Offset: {x: -0.009475514, y: -0.005300887}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -181,7 +182,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.20029815, y: 0.1894158}
+  m_Size: {x: 0.17917049, y: 0.17025362}
   m_EdgeRadius: 0
 --- !u!50 &4750740745123637007
 Rigidbody2D:
