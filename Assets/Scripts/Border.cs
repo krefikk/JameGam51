@@ -3,6 +3,8 @@ using UnityEngine;
 public class Border : MonoBehaviour
 {
     private CameraShake mainCam;
+    private GameplayAudio gameplayAudio;
+
     private float shakeTime = 5f;
     private float shakeTimer = 0f;
     private bool shaked = false;
@@ -10,6 +12,7 @@ public class Border : MonoBehaviour
     private void Awake()
     {
         mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraShake>();
+        gameplayAudio = FindFirstObjectByType<GameplayAudio>();
     }
 
     private void Update()
@@ -27,6 +30,8 @@ public class Border : MonoBehaviour
             return;
 
         mainCam.Shake(0.1f, 0.05f, true, true);
+        gameplayAudio.PlayBorderCollision();
+
         shaked = true;
     }
 }

@@ -22,6 +22,7 @@ public class GameplayAudio : MonoBehaviour
     [SerializeField] private AudioClip[] bubbleCollect;
     [SerializeField] private AudioClip mine;
     [SerializeField] private AudioClip heartbeat;
+    [SerializeField] private AudioClip borderCollision;
 
     [Header("UI SFX")]
     [SerializeField] private AudioClip buttonHover;
@@ -30,6 +31,8 @@ public class GameplayAudio : MonoBehaviour
     private Dictionary<Fish, AudioSource> fishAudioSources = new Dictionary<Fish, AudioSource>();
     private int lastDamageIndex = -1;
     private int lastBubbleIndex = -1;
+
+    private bool oxygenHigh = true;
 
     private void Start()
     {
@@ -100,7 +103,6 @@ public class GameplayAudio : MonoBehaviour
             {
                 AudioManager.master.SFX.PlayPausable(playerSwim);
             }
-            
             AudioManager.master.SFX.UnPausePausable();
         }
 
@@ -109,6 +111,21 @@ public class GameplayAudio : MonoBehaviour
             AudioManager.master.SFX.PausePausable();
         }
 
+        if (UIManager.Instance.OxygenLow && oxygenHigh)
+        {
+            oxygenHigh = false;
+            if (AudioManager.master.SFX.pausableSource == null)
+            {
+                AudioManager.master.SFX.PlayPausable(heartbeat);
+            }
+            AudioManager.master.SFX.UnPausePausable();
+        }
+
+        if (!oxygenHigh && !UIManager.Instance.OxygenLow)
+        {
+            oxygenHigh = true;
+            AudioManager.master.SFX.PausePausable();
+        }
     }
 
     public void PlayPlayerDamage()
@@ -172,6 +189,14 @@ public class GameplayAudio : MonoBehaviour
         if (playerDead != null && AudioManager.master != null)
         {
             AudioManager.master.SFX.Play(playerDead);
+        }
+    }
+
+    public void PlayBorderCollision()
+    {
+        if (borderCollision != null && AudioManager.master != null)
+        {
+            AudioManager.master.SFX.Play(borderCollision);
         }
     }
 }

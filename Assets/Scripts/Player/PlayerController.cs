@@ -29,6 +29,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float noiseDuration = 0.1f;
     private float currentNoiseRadius;
 
+    [Header("Bubble Particles")]
+    [SerializeField] private ParticleSystem thrustBubbles;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -59,6 +62,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         HandleInputAndRotation();
+        HandleThrustEffects();
     }
 
     private void FixedUpdate()
@@ -117,6 +121,20 @@ public class PlayerController : MonoBehaviour
     {
         rotationDirection *= -1;
         targetRotateSpeed = maxRotateSpeed * rotationDirection;
+    }
+
+    private void HandleThrustEffects()
+    {
+        if (thrustInput.action.IsPressed())
+        {
+            if (!thrustBubbles.isPlaying)
+                thrustBubbles.Play();
+        }
+        else
+        {
+            if (thrustBubbles.isPlaying)
+                thrustBubbles.Stop();
+        }
     }
 
     private void HandleDamage(bool isDrowning)

@@ -120,15 +120,9 @@ public class Fish : MonoBehaviour
             anim.SetTrigger("Eat");
             anim.SetBool("Ate", true);
             bloodParticles.Emit(bloodAmount);
-            // eat sound
 
-            ////////
-        if (gameplayAudio != null)
-        {
-        gameplayAudio.PlayPlayerDamage();
-        }
-            ///////
-
+            if (gameplayAudio != null)
+                gameplayAudio.PlayPlayerDamage();
         }
     }
 
