@@ -38,6 +38,12 @@ public class FishSpawner : MonoBehaviour
     [SerializeField] private float timeToMaxDifficulty = 900f;
     private float currentGameTime = 0f;
 
+    [SerializeField] private float startMoveSpeed = 5f;
+    [SerializeField] private float endMoveSpeed = 7f;
+
+    [SerializeField] private float startTurnSpeed = 0.5f;
+    [SerializeField] private float endTurnSpeed = 1.25f;
+
     [Tooltip("Time that must pass after the indicator appears on the screen for the fish to start arriving")]
     [SerializeField] private float easyFishWaitTime = 2.5f;
     [SerializeField] private float midFishWaitTime = 1.5f;
@@ -186,6 +192,11 @@ public class FishSpawner : MonoBehaviour
         List<Vector2> spawnPositions = new List<Vector2>();
         List<Fish> spawnedFishes = new List<Fish>();
 
+        float progress = Mathf.Clamp01(currentGameTime / timeToMaxDifficulty);
+
+        float calculatedSpeed = Mathf.Lerp(startMoveSpeed, endMoveSpeed, progress);
+        float calculatedTurnSpeed = Mathf.Lerp(startTurnSpeed, endTurnSpeed, progress);
+
         for (int i = 0; i < amount; i++)
         {
             bool onLeft = Random.Range(0, 2) == 1 ? true : false;
@@ -197,7 +208,10 @@ public class FishSpawner : MonoBehaviour
                 if (CheckIfSpawnable(spawnPositions, spawnPosition))
                 {
                     GameObject fishObj = Instantiate(rightPiranha, spawnPosition, Quaternion.identity);
-                    spawnedFishes.Add(fishObj.GetComponent<Fish>());
+                    Fish fishScript = fishObj.GetComponent<Fish>();
+
+                    fishScript.SetupStats(calculatedSpeed, calculatedTurnSpeed);
+                    spawnedFishes.Add(fishScript);
                     spawnPositions.Add(spawnPosition);
                 }
                 else
@@ -209,7 +223,10 @@ public class FishSpawner : MonoBehaviour
                 if (CheckIfSpawnable(spawnPositions, spawnPosition))
                 {
                     GameObject fishObj = Instantiate(leftPiranha, spawnPosition, Quaternion.identity);
-                    spawnedFishes.Add(fishObj.GetComponent<Fish>());
+                    Fish fishScript = fishObj.GetComponent<Fish>();
+
+                    fishScript.SetupStats(calculatedSpeed, calculatedTurnSpeed);
+                    spawnedFishes.Add(fishScript);
                     spawnPositions.Add(spawnPosition);
                 }
                 else

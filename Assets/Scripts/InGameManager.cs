@@ -17,7 +17,6 @@ public class InGameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreTextMesh;
     [SerializeField] private TextMeshProUGUI timeTextMesh;
 
-    // Animasyonlanacak
     [SerializeField] private RectTransform healthBar;
     [SerializeField] private RectTransform oxygenBar;
     [SerializeField] private RectTransform timer;

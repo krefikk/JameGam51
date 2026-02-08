@@ -27,6 +27,7 @@ public class Fish : MonoBehaviour
     [Range(0, 180)][SerializeField] private float maxTurnAngle = 90f;
 
     [Header("Swimming")]
+    [SerializeField] private bool determineRandomly = true;
     [SerializeField] public float waveFrequency = 2f;
     [SerializeField] public float waveAmplitude = 1f;
     [SerializeField] private Vector3 direction = Vector3.left;
@@ -63,6 +64,12 @@ public class Fish : MonoBehaviour
     void Start()
     {
         waveTimer = Random.Range(0f, 100f);
+
+        if (determineRandomly)
+        {
+            waveFrequency = Random.Range(15f, 35f);
+            waveAmplitude = Random.Range(3f, 8f);
+        }
 
         direction = direction.normalized;
         startDirection = direction;
@@ -238,6 +245,12 @@ public class Fish : MonoBehaviour
         fishAudioSource = AudioManager.master.SFX.PlayLoop3D(swimSound, transform, 13f, 45f);
     }
         ////
+    }
+
+    public void SetupStats(float newMoveSpeed, float newTurnSpeed)
+    {
+        this.moveSpeed = newMoveSpeed;
+        this.turnSpeed = newTurnSpeed;
     }
 
     ///
