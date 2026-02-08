@@ -111,22 +111,35 @@ public class SFXManager : MonoBehaviour
         return source;
     }
 
-    public void PlayPausable(AudioClip clip)
+    public void PlayPausable(AudioClip clip, AudioMixerGroup mixer)
     {
         if (clip == null) return;
         if (!isInitialized) InitializePool();
 
         if (pausableSource == null)
         {
-            pausableClip = clip;
-            pausableSource = GetAvailableSource();
-            pausableSource.outputAudioMixerGroup = AudioManager.master.SFXMixer;
-            pausableSource.clip = clip;
-            pausableSource.loop = true;
-            pausableSource.spatialBlend = 0f;
-            pausableSource.Play();
-            pausableSource.Pause();
-        }
+        GameObject pausableObject = new GameObject("PausableAudioSource");
+        pausableObject.transform.SetParent(transform);
+        pausableSource = pausableObject.AddComponent<AudioSource>();
+        pausableSource.loop = true;
+        pausableSource.spatialBlend = 0f;
+        pausableSource.playOnAwake = false;
+        pausableSource.outputAudioMixerGroup = mixer;
+
+    }
+
+    if (pausableSource.clip != clip)
+    {
+        pausableClip = clip;
+        pausableSource.clip = clip;
+    }
+
+    if (!pausableSource.isPlaying)
+    {
+        pausableSource.Play();
+    }
+
+    pausableSource.Pause();
     }
 
     public void PausePausable()
@@ -156,9 +169,8 @@ public class SFXManager : MonoBehaviour
 
         if (pausableSource != null)
         {
-            pausableSource.Stop();
-            pausableSource = null;
-            pausableClip = null;
+        pausableSource.Stop();
+        pausableClip = null;
         }
     }
 }

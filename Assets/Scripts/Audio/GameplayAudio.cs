@@ -121,12 +121,8 @@ public class GameplayAudio : MonoBehaviour
         {
             if (AudioManager.master.SFX.pausableSource == null)
             {
-                AudioManager.master.SFX.PlayPausable(playerSwim);
+                AudioManager.master.SFX.PlayPausable(playerSwim, AudioManager.master.SpeakerPropellerMixer);
             }
-
-            AudioSource currentSource = AudioManager.master.SFX.pausableSource;
-            if (currentSource != null && currentSource.clip == playerSwim)
-                currentSource.time = Random.Range(0f, currentSource.clip.length);
 
             AudioManager.master.SFX.UnPausePausable();
         }

@@ -19,6 +19,8 @@ public AudioMixerGroup MXMixer => mXMixer;
 public AudioMixerGroup SFXMixer => sFXMixer;
 [SerializeField] private AudioMixerGroup uIMixer;
 public AudioMixerGroup UIMixer => uIMixer;
+[SerializeField] private AudioMixerGroup speakerPropellerMixer;
+public AudioMixerGroup SpeakerPropellerMixer => speakerPropellerMixer;
 
 
 
