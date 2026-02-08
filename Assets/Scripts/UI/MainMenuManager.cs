@@ -28,6 +28,9 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private float animationDuration = 0.5f;
     [SerializeField] private float moveDistance = 1500f;
 
+    private Vector2 containerDefaultPos;
+    private Vector2 buttonDefaultPos;
+
     public char[] turkishChars = { 'ç', 'ð', 'ý', 'ö', 'þ', 'ü' };
     private bool isTransitioning = false;
 
@@ -36,8 +39,10 @@ public class MainMenuManager : MonoBehaviour
         leaderboardClose.gameObject.SetActive(false);
         SetSoundButtonSprite(masterVolumeSlider.value);
 
-        if (SaveManager.GetName() == "None" || SaveManager.GetName() == "")
-            nameInputPanel.Enter();
+        containerDefaultPos = mainMenuContainer.anchoredPosition;
+        buttonDefaultPos = soundButton.rectTransform.anchoredPosition;
+
+        StartCoroutine(AnimateIn());
     }
 
     private void OnEnable()
@@ -48,6 +53,46 @@ public class MainMenuManager : MonoBehaviour
     private void OnDisable()
     {
         masterVolumeSlider.onValueChanged.RemoveListener(SetSoundButtonSprite);
+    }
+
+    private IEnumerator AnimateIn()
+    {
+        isTransitioning = true;
+
+        Vector2 containerStart = containerDefaultPos - Vector2.up * moveDistance;
+        Vector2 buttonStart = buttonDefaultPos - Vector2.up * moveDistance;
+
+        Vector2 containerTarget = containerDefaultPos;
+        Vector2 buttonTarget = buttonDefaultPos;
+
+        mainMenuContainer.anchoredPosition = containerStart;
+        soundButton.rectTransform.anchoredPosition = buttonStart;
+
+        float timer = 0f;
+        while (timer < animationDuration)
+        {
+            timer += Time.deltaTime;
+            float t = timer / animationDuration;
+            float smoothT = Mathf.SmoothStep(0f, 1f, t);
+
+            mainMenuContainer.anchoredPosition = Vector2.Lerp(containerStart, containerTarget, smoothT);
+            soundButton.rectTransform.anchoredPosition = Vector2.Lerp(buttonStart, buttonTarget, smoothT);
+
+            yield return null;
+        }
+
+        mainMenuContainer.anchoredPosition = containerTarget;
+        soundButton.rectTransform.anchoredPosition = buttonTarget;
+
+        isTransitioning = false;
+
+        CheckNameInput();
+    }
+
+    private void CheckNameInput()
+    {
+        if (SaveManager.GetName() == "None" || SaveManager.GetName() == "")
+            nameInputPanel.Enter();
     }
 
     private void SetSoundButtonSprite(float volume)
@@ -70,23 +115,21 @@ public class MainMenuManager : MonoBehaviour
     {
         isTransitioning = true;
 
-        Vector2 containerStartPos = mainMenuContainer.anchoredPosition;
-        Vector2 buttonStartPos = soundButton.rectTransform.anchoredPosition;
+        Vector2 containerStart = mainMenuContainer.anchoredPosition;
+        Vector2 buttonStart = soundButton.rectTransform.anchoredPosition;
 
-        Vector2 containerTargetPos = containerStartPos + Vector2.up * moveDistance;
-        Vector2 buttonTargetPos = buttonStartPos + Vector2.up * moveDistance;
+        Vector2 containerTarget = containerStart + Vector2.up * moveDistance;
+        Vector2 buttonTarget = buttonStart + Vector2.up * moveDistance;
 
         float timer = 0f;
-
         while (timer < animationDuration)
         {
             timer += Time.deltaTime;
             float t = timer / animationDuration;
-
             float smoothT = Mathf.SmoothStep(0f, 1f, t);
 
-            mainMenuContainer.anchoredPosition = Vector2.Lerp(containerStartPos, containerTargetPos, smoothT);
-            soundButton.rectTransform.anchoredPosition = Vector2.Lerp(buttonStartPos, buttonTargetPos, smoothT);
+            mainMenuContainer.anchoredPosition = Vector2.Lerp(containerStart, containerTarget, smoothT);
+            soundButton.rectTransform.anchoredPosition = Vector2.Lerp(buttonStart, buttonTarget, smoothT);
 
             yield return null;
         }

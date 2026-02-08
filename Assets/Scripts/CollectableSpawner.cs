@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class CollectableSpawner : MonoBehaviour
 {
+    private PlayerState state;
+
     private Queue<Vector2> bubbleSpawnPositions = new Queue<Vector2>();
     private Queue<Vector2> mineSpawnPositions = new Queue<Vector2>();
     private List<Vector2> allSpawnPositions = new List<Vector2>();
@@ -42,6 +44,11 @@ public class CollectableSpawner : MonoBehaviour
     private bool spawningBubble = false;
     private bool spawningMine = false;
 
+    private void Awake()
+    {
+        state = FindFirstObjectByType<PlayerState>();
+    }
+
     private void Start()
     {
         StartCoroutine(WaitFor(waitTimeForSpawnAfterGameStarts));
@@ -49,6 +56,9 @@ public class CollectableSpawner : MonoBehaviour
 
     private void Update()
     {
+        if (state.dead)
+            return;
+
         RefreshQueues();
         SpawnMechanism();
         IncreaseChancesOverTime();

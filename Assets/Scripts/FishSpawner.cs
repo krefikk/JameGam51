@@ -18,6 +18,7 @@ public struct FishSpawnRequest
 
 public class FishSpawner : MonoBehaviour
 {
+    private PlayerState state;
     private Queue<FishSpawnRequest> awaitingRequests = new Queue<FishSpawnRequest>();
 
     [SerializeField] private GameObject rightPiranha;
@@ -34,6 +35,9 @@ public class FishSpawner : MonoBehaviour
 
     [SerializeField] private float minimumYPadding;
 
+    [SerializeField] private float timeToMaxDifficulty = 900f;
+    private float currentGameTime = 0f;
+
     [Tooltip("Time that must pass after the indicator appears on the screen for the fish to start arriving")]
     [SerializeField] private float easyFishWaitTime = 2.5f;
     [SerializeField] private float midFishWaitTime = 1.5f;
@@ -46,24 +50,62 @@ public class FishSpawner : MonoBehaviour
 
     private bool spawningFishes = false;
 
-    private void Start()
+    private void Awake()
     {
-        List<FishSpawnRequest> spawn = new List<FishSpawnRequest>();
-        spawn.Add(new FishSpawnRequest(3, 0));
-
-        SpawnFishesByList(spawn);
+        state = FindFirstObjectByType<PlayerState>();
     }
 
     private void Update()
     {
+        if (state.dead)
+            return;
+
+        if (currentGameTime < timeToMaxDifficulty)
+            currentGameTime += Time.deltaTime;
+
+        if (awaitingRequests.Count == 0 && !spawningFishes)
+            GenerateNextWave();
+
         if (awaitingRequests.Count > 0 && !spawningFishes)
         {
             FishSpawnRequest nextRequest = awaitingRequests.Dequeue();
+            spawningFishes = true;
+
             if (nextRequest.waitTime > 0)
-                StartCoroutine(WaitFor(nextRequest.waitTime));
+                StartCoroutine(ProcessRequestWithDelay(nextRequest));
             else
                 StartCoroutine(SpawnFishesCoroutine(nextRequest.amount, nextRequest.difficulty));
         }
+    }
+
+    private void GenerateNextWave()
+    {
+        float progress = Mathf.Clamp01(currentGameTime / timeToMaxDifficulty);
+
+        int amount = Mathf.RoundToInt(Mathf.Lerp(1, 5, progress));
+        int difficulty = DetermineDifficulty(progress);
+        float waveInterval = Mathf.Lerp(4f, 0.5f, progress);
+
+        FishSpawnRequest request = new FishSpawnRequest(amount, difficulty, waveInterval);
+        awaitingRequests.Enqueue(request);
+    }
+
+    private int DetermineDifficulty(float progress)
+    {
+        float randomValue = Random.value;
+
+        if (progress < 0.25f)
+            return 0;
+        else if (progress < 0.60f)
+            return (randomValue < 0.7f) ? 1 : 0;
+        else
+            return (randomValue < 0.6f) ? 2 : 1;
+    }
+
+    private IEnumerator ProcessRequestWithDelay(FishSpawnRequest request)
+    {
+        yield return new WaitForSeconds(request.waitTime);
+        StartCoroutine(SpawnFishesCoroutine(request.amount, request.difficulty));
     }
 
     public void SpawnFishesByList(List<FishSpawnRequest> requests)

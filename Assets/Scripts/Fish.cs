@@ -54,6 +54,11 @@ public class Fish : MonoBehaviour
         {
             float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.AngleAxis(targetAngle, Vector3.forward);
+
+            if (Mathf.Abs(targetAngle) > 90)
+                sr.flipY = true;
+            else
+                sr.flipY = false;
         }
     }
 
@@ -145,11 +150,6 @@ public class Fish : MonoBehaviour
         Quaternion targetRotation = Quaternion.AngleAxis(targetAngle, Vector3.forward);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
-
-        if (Mathf.Abs(targetAngle) > 90)
-            sr.flipY = true;
-        else
-            sr.flipY = false;
     }
 
     protected void ResetMoveSpeed(float deceleration = 2f)
