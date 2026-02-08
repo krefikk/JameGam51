@@ -12,7 +12,7 @@ public class Decoration : MonoBehaviour
 
     private void Start()
     {
-        float random = Random.Range(0.5f, 1.5f);
+        float random = Random.Range(0.25f, 2f);
         StartCoroutine(WaitAndResetAnimation(random));
     }
 

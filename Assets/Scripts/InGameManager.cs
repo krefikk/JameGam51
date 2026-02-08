@@ -27,7 +27,7 @@ public class InGameManager : MonoBehaviour
     private Vector2 startPosHealth, startPosOxygen, startPosTimer, startPosScore;
     private Vector3 startPosPlayer;
 
-    [SerializeField] private float animDuration = 0.6f;
+    [SerializeField] private float animDuration = 1f;
     [SerializeField] private float offScreenOffset = 500f;
 
     [SerializeField] private Animator pausePanel;

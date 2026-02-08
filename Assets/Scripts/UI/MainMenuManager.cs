@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -16,8 +17,13 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private Sprite highSound;
     internal bool soundButtonActive = true;
 
+    [Header("Audio")]
+    [SerializeField] private AudioMixer mixer;
+
     [Header("Sliders")]
     [SerializeField] private Slider masterVolumeSlider;
+    [SerializeField] private Slider musicVolumeSlider;
+    [SerializeField] private Slider sfxVolumeSlider;
 
     [Header("Panels")]
     [SerializeField] private Animator leaderbaordPanel;
@@ -34,10 +40,21 @@ public class MainMenuManager : MonoBehaviour
     public char[] turkishChars = { 'ç', 'ð', 'ý', 'ö', 'þ', 'ü' };
     private bool isTransitioning = false;
 
+    private void Awake()
+    {
+        masterVolumeSlider.value = PlayerPrefs.GetFloat("MasterVolume", 1f);
+        musicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume", 1f);
+        sfxVolumeSlider.value = PlayerPrefs.GetFloat("SFXVolume", 1f);
+    }
+
     private void Start()
     {
         leaderboardClose.gameObject.SetActive(false);
         SetSoundButtonSprite(masterVolumeSlider.value);
+
+        OnSliderValueChange(masterVolumeSlider);
+        OnSliderValueChange(musicVolumeSlider);
+        OnSliderValueChange(sfxVolumeSlider);
 
         containerDefaultPos = mainMenuContainer.anchoredPosition;
         buttonDefaultPos = soundButton.rectTransform.anchoredPosition;
@@ -53,6 +70,33 @@ public class MainMenuManager : MonoBehaviour
     private void OnDisable()
     {
         masterVolumeSlider.onValueChanged.RemoveListener(SetSoundButtonSprite);
+    }
+
+    public void OnSliderValueChange(Slider slider)
+    {
+        if (slider == masterVolumeSlider)
+        {
+            PlayerPrefs.SetFloat("MasterVolume", slider.value);
+            ApplyVolume("MasterVolume", slider.value);
+        }
+        else if (slider == musicVolumeSlider)
+        {
+            PlayerPrefs.SetFloat("MusicVolume", slider.value);
+            ApplyVolume("MusicVolume", slider.value);
+        }
+        else if (slider == sfxVolumeSlider)
+        {
+            PlayerPrefs.SetFloat("SFXVolume", slider.value);
+            ApplyVolume("SFXVolume", slider.value);
+        }
+
+        PlayerPrefs.Save();
+    }
+
+    private void ApplyVolume(string exposedParam, float value)
+    {
+        float dB = value <= 0f ? -80f : Mathf.Log10(value) * 20f;
+        mixer.SetFloat(exposedParam, dB);
     }
 
     private IEnumerator AnimateIn()

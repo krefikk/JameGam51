@@ -323,7 +323,7 @@ MonoBehaviour:
   timer: {fileID: 421532292}
   score: {fileID: 714298086}
   player: {fileID: 1991795439}
-  animDuration: 0.6
+  animDuration: 1
   offScreenOffset: 500
   pausePanel: {fileID: 95047056}
 --- !u!4 &57574064
@@ -5575,6 +5575,7 @@ MonoBehaviour:
   - {fileID: 409169935}
   oxygenBar: {fileID: 669224616}
   oxygenPercent: {fileID: 1690121962}
+  OxygenLow: 0
   timerMesh: {fileID: 421532293}
   scoreMesh: {fileID: 714298087}
   scoreAnimationSpeed: 5
