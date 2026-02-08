@@ -12,11 +12,19 @@ public class Mine : Collectible
     internal bool explosionStarted = false;
     internal bool exploded = false;
 
+    ///
+    private GameplayAudio gameplayAudio;
+    ///
+
     protected override void Start()
     {
         base.Start();
         if (damage >= 2)
             anim.SetBool("Dangerous", true);
+
+        //    
+        gameplayAudio = FindFirstObjectByType<GameplayAudio>();
+        //
     }
 
     protected void OnTriggerEnter2D(Collider2D collision)
@@ -27,6 +35,7 @@ public class Mine : Collectible
             {
                 ResetMoveSpeed();
                 StartCoroutine(StartExplosion());
+
             } 
         }
 
@@ -53,6 +62,11 @@ public class Mine : Collectible
     private IEnumerator StartExplosion()
     {
         explosionStarted = true;
+
+        //
+        gameplayAudio.PlayMineExplosion();
+        //
+        
         anim.SetBool("StartExplosion", true);
         explosionTimer = explosionTime;
 

@@ -108,6 +108,7 @@ MonoBehaviour:
   waveAmplitude: 0.15
   direction: {x: 0, y: 1}
   oxygenAmount: 15
+  bubbleSound: {fileID: 8300000, guid: b8060acf6cacd415e879fc3ac8136a1f, type: 3}
 --- !u!95 &9057313897248897659
 Animator:
   serializedVersion: 7

@@ -1671,6 +1671,7 @@ MonoBehaviour:
   easyFishSpawnWaitTime: 3.5
   midFishSpawnWaitTime: 2.2
   hardFishSpawnWaitTime: 1.2
+  warningSound: {fileID: 8300000, guid: ee5364178ba2e47209e2bd1f0e3a1bf6, type: 3}
 --- !u!1 &399307162
 GameObject:
   m_ObjectHideFlags: 0
@@ -7142,8 +7143,8 @@ MonoBehaviour:
   gameplayMX: {fileID: 8300000, guid: 5fd16b029284d41af8cbe5782c676eae, type: 3}
   crossfadeDuration: 2
   bG: {fileID: 8300000, guid: 1421e51600b6e420ab218b3685171116, type: 3}
-  playerSwim: {fileID: 8300000, guid: 85bcab4db8f8e43e999107adf2f2f588, type: 3}
-  playerDead: {fileID: 0}
+  playerSwim: {fileID: 8300000, guid: 48d5ef93457c244ea98ee57dd7e6dfe8, type: 3}
+  playerDead: {fileID: 8300000, guid: 9003c76f0ecf741c88f1afd015b75fd9, type: 3}
   playerDamage:
   - {fileID: 8300000, guid: dfa66973517bf401ebb40d8ad40c690c, type: 3}
   - {fileID: 8300000, guid: 047ae536c285c46b5adb122c116d4aba, type: 3}
@@ -7151,8 +7152,12 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 15f80f8cf94a14aec902a8d65cf42549, type: 3}
   - {fileID: 8300000, guid: e088b8061349e4ee097e8665372e0464, type: 3}
   fishSwim: {fileID: 8300000, guid: 9985fc1a27a6c41fe9ee463ed26d5f59, type: 3}
-  bubbleCollect: []
-  bomb: {fileID: 0}
+  bubbleCollect:
+  - {fileID: 8300000, guid: b8060acf6cacd415e879fc3ac8136a1f, type: 3}
+  - {fileID: 8300000, guid: 7df2235dd119943d29cfdab184a2cd57, type: 3}
+  - {fileID: 8300000, guid: 250bb23f145884656b6e0ba67d96c7dd, type: 3}
+  - {fileID: 8300000, guid: 90c877a4232064357bba8579d457d40d, type: 3}
+  mine: {fileID: 8300000, guid: 3260683469d1a41daab73803824f8bf0, type: 3}
   heartbeat: {fileID: 0}
   buttonHover: {fileID: 8300000, guid: cc141cbd9b6c84cbb8a5d357aeb16b76, type: 3}
   buttonClick: {fileID: 8300000, guid: 168d0a36f500f416dafa800209fb8309, type: 3}
