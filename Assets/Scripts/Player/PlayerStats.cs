@@ -33,6 +33,9 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private float restoreTimeSpeed = 5f;
     private bool restoreTime;
 
+    [Header("Speaker")]
+    [SerializeField] public Transform speakerPosition;
+
     [Header("Actions")]
     public Action onDiverDie;
     public Action<bool> onDiverTakeDamage; // drown damage: true, hit damage: false
@@ -51,6 +54,10 @@ public class PlayerStats : MonoBehaviour
 
     private void Update()
     {
+        RestoreTimeScale();
+        if (state.dead)
+            return;
+
         oxygen -= Time.deltaTime * oxygenConsumptionRate;
         if (oxygen <= 0)
         {
@@ -65,7 +72,7 @@ public class PlayerStats : MonoBehaviour
             noOxygenDamageTimer = 0f;
 
         UIManager.Instance.UpdateOxygenBar(maxOxygen, oxygen);
-        RestoreTimeScale();
+        
         FlashWhileInvincible();
 
         if (state.invinsible)
@@ -121,10 +128,15 @@ public class PlayerStats : MonoBehaviour
 
         if (health <= 0)
         {
-            health = 0;
-            Time.timeScale = 1f;
-            onDiverDie?.Invoke();
+            Die();
         }
+    }
+
+    private void Die()
+    {
+        state.dead = true;
+        health = 0;
+        onDiverDie?.Invoke();
     }
 
     private void HitStopTime(float delay)

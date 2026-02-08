@@ -33,7 +33,7 @@ public class ScoreManager : MonoBehaviour
         if (player == null || state == null)
             return;
 
-        if (player.Health <= 0)
+        if (state.dead)
             return;
 
         CalculateSurvivalScore();

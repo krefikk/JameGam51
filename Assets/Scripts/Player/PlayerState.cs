@@ -8,6 +8,7 @@ public class PlayerState : MonoBehaviour
 
     [ShowNonSerializedField] internal bool thrusting = false;
     [ShowNonSerializedField] internal bool invinsible = false;
+    [ShowNonSerializedField] internal bool dead = false;
 
     [ShowNonSerializedField] internal int bubblesPopped = 0;
     [ShowNonSerializedField] internal int minesExploded = 0;
@@ -24,12 +25,14 @@ public class PlayerState : MonoBehaviour
     {
         GetComponent<PlayerStats>().onDiverExplodedMine += IncreaseMinesExploded;
         GetComponent<PlayerStats>().onDiverGetBubble += IncreaseBubblesPopped;
+        GetComponent<PlayerStats>().onDiverDie += DieAnimation;
     }
 
     private void OnDisable()
     {
         GetComponent<PlayerStats>().onDiverExplodedMine -= IncreaseMinesExploded;
         GetComponent<PlayerStats>().onDiverGetBubble -= IncreaseBubblesPopped;
+        GetComponent<PlayerStats>().onDiverDie -= DieAnimation;
     }
 
     private void Update()
@@ -39,11 +42,26 @@ public class PlayerState : MonoBehaviour
 
     private void IncreaseBubblesPopped()
     {
+        if (dead) return;
+
         bubblesPopped++;
     }
 
     private void IncreaseMinesExploded()
     {
+        if (dead) return;
+
         minesExploded++;
+    }
+
+    private void DieAnimation()
+    {
+        anim.SetBool("Die", true);
+
+        GameObject speakerPrefab = Resources.Load<GameObject>("Speaker");
+        GameObject speaker = Instantiate(speakerPrefab, GetComponent<PlayerStats>().speakerPosition.position, transform.rotation);
+        speaker.GetComponent<Rigidbody2D>().AddForce(new Vector2(Random.Range(-1, 1), Random.Range(-1, 1)) * 3f);
+
+        GetComponent<Rigidbody2D>().gravityScale = 0.45f;
     }
 }

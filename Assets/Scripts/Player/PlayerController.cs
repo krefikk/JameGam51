@@ -39,11 +39,13 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         stats.onDiverTakeDamage += HandleDamage;
+        stats.onDiverDie += OnDie;
     }
 
     private void OnDisable()
     {
         stats.onDiverTakeDamage -= HandleDamage;
+        stats.onDiverDie -= OnDie;
     }
 
     private void Start()
@@ -74,6 +76,9 @@ public class PlayerController : MonoBehaviour
     private void HandleInputAndRotation()
     {
         currentRotateSpeed = Mathf.MoveTowards(currentRotateSpeed, targetRotateSpeed, rotationAcceleration * Time.deltaTime);
+
+        if (state.dead)
+            return;
 
         if (thrustInput.action.IsPressed())
         {
@@ -118,5 +123,10 @@ public class PlayerController : MonoBehaviour
     {
         if (!isDrowning)
             ChangeRotationDirection();
+    }
+
+    private void OnDie()
+    {
+        targetRotateSpeed = 0f;
     }
 }

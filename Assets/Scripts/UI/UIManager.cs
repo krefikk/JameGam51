@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
+    public PlayerState state;
 
     [Header("Health Bar")]
     [SerializeField] private Animator[] healthBars = new Animator[5]; // index 0: leftest, index 4: rightest
@@ -33,6 +34,7 @@ public class UIManager : MonoBehaviour
         else Destroy(gameObject);
 
         scoreManager = FindFirstObjectByType<ScoreManager>();
+        state = FindFirstObjectByType<PlayerState>();
 
         timer = 0f;
         timerMesh.text = "00:00";
@@ -49,6 +51,9 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
+        if (state.dead)
+            return;
+
         IncreaseTimer();
         UpdateAnimatedScore();
     }
