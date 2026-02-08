@@ -114,6 +114,7 @@ MonoBehaviour:
   direction: {x: -1, y: 0, z: 0}
   bloodParticles: {fileID: 659104064813055620}
   bloodAmount: 10
+  swimSound: {fileID: 8300000, guid: 9985fc1a27a6c41fe9ee463ed26d5f59, type: 3}
 --- !u!95 &3697012724858598743
 Animator:
   serializedVersion: 7

@@ -1,2 +1,13 @@
 fileFormatVersion: 2
 guid: c21f4ce58f07de54d8cdf8b1870684f5
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - bloodParticles: {instanceID: 0}
+  - swimSound: {fileID: 8300000, guid: 9985fc1a27a6c41fe9ee463ed26d5f59, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

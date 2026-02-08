@@ -10,6 +10,10 @@ public class Fish : MonoBehaviour
     private Animator anim;
     private PlayerController player;
 
+    ///
+    private GameplayAudio gameplayAudio;
+    ///
+
     [Header("Flags")]
     private bool dead = false;
     private bool canMove = false;
@@ -34,6 +38,13 @@ public class Fish : MonoBehaviour
     private Vector3 startDirection;
     private float waveTimer;
     private Vector3? targetPosition = null;
+    
+
+    ///
+    [Header("Audio")]
+    [SerializeField] private AudioClip swimSound;
+    private AudioSource fishAudioSource;
+    /// 
 
     private void Awake()
     {
@@ -41,6 +52,12 @@ public class Fish : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         player = FindFirstObjectByType<PlayerController>();
+
+        /////
+        gameplayAudio = FindFirstObjectByType<GameplayAudio>();
+        /////
+
+
     }
 
     void Start()
@@ -97,6 +114,14 @@ public class Fish : MonoBehaviour
             anim.SetBool("Ate", true);
             bloodParticles.Emit(bloodAmount);
             // eat sound
+
+            ////////
+        if (gameplayAudio != null)
+        {
+        gameplayAudio.PlayPlayerDamage();
+        }
+            ///////
+
         }
     }
 
@@ -206,7 +231,24 @@ public class Fish : MonoBehaviour
     public void StartMove()
     {
         canMove = true;
+        ////
+    
+    if (swimSound != null && AudioManager.master != null)
+    {
+        fishAudioSource = AudioManager.master.SFX.PlayLoop3D(swimSound, transform, 13f, 45f);
     }
+        ////
+    }
+
+    ///
+    private void OnDestroy()
+{
+    if (fishAudioSource != null)
+    {
+        Destroy(fishAudioSource.gameObject);
+    }
+}
+    ///
 
     private void OnDrawGizmos()
     {
