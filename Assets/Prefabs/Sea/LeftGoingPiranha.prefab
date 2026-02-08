@@ -107,7 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   turnSpeed: 0.5
-  targetDistanceThreshold: 2.25
+  targetDistanceThreshold: 3
   maxTurnAngle: 90
   determineRandomly: 1
   waveFrequency: 20
