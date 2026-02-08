@@ -82,12 +82,26 @@ public class FishSpawner : MonoBehaviour
     {
         float progress = Mathf.Clamp01(currentGameTime / timeToMaxDifficulty);
 
-        int amount = Mathf.RoundToInt(Mathf.Lerp(1, 5, progress));
+        int amount = DetermineAmount(progress);
+
         int difficulty = DetermineDifficulty(progress);
         float waveInterval = Mathf.Lerp(4f, 0.5f, progress);
 
         FishSpawnRequest request = new FishSpawnRequest(amount, difficulty, waveInterval);
         awaitingRequests.Enqueue(request);
+    }
+
+    private int DetermineAmount(float progress)
+    {
+        int baseAmount = Mathf.RoundToInt(Mathf.Lerp(2, 5, progress));
+
+        if (progress < 0.2f)
+        {
+            if (Random.value < 0.2f)
+                return 1;
+        }
+
+        return baseAmount;
     }
 
     private int DetermineDifficulty(float progress)
