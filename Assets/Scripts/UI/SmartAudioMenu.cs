@@ -8,6 +8,7 @@ public class SmartAudioMenu : MonoBehaviour
     [SerializeField] private RectTransform sidePanelContainer;
     [SerializeField] private RectTransform soundButtonTrigger;
     [SerializeField] private RectTransform visualButton;
+    private MainMenuManager mainMenuManager;
 
     [Header("Settings")]
     [SerializeField] private float hoverDelay = 0.5f;
@@ -36,6 +37,11 @@ public class SmartAudioMenu : MonoBehaviour
 
     private Camera uiCamera;
 
+    private void Awake()
+    {
+        mainMenuManager = FindFirstObjectByType<MainMenuManager>();
+    }
+
     private void Start()
     {
         menuDefaultPos = mainMenuContainer.anchoredPosition;
@@ -59,7 +65,7 @@ public class SmartAudioMenu : MonoBehaviour
 
         if (!isMenuOpen)
         {
-            if (mouseOnButton)
+            if (mouseOnButton && mainMenuManager.soundButtonActive)
             {
                 hoverTimer += Time.deltaTime;
                 if (hoverTimer >= hoverDelay)

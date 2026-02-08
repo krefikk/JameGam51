@@ -14,19 +14,30 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private Sprite lowSound;
     [SerializeField] private Sprite midSound;
     [SerializeField] private Sprite highSound;
+    internal bool soundButtonActive = true;
 
     [Header("Sliders")]
     [SerializeField] private Slider masterVolumeSlider;
+
+    [Header("Panels")]
+    [SerializeField] private Animator leaderbaordPanel;
+    [SerializeField] private Button leaderboardClose;
+    [SerializeField] private NameInputPanel nameInputPanel;
 
     [Header("Animation Settings")]
     [SerializeField] private float animationDuration = 0.5f;
     [SerializeField] private float moveDistance = 1500f;
 
+    public char[] turkishChars = { 'ç', 'ð', 'ý', 'ö', 'þ', 'ü' };
     private bool isTransitioning = false;
 
     private void Start()
     {
+        leaderboardClose.gameObject.SetActive(false);
         SetSoundButtonSprite(masterVolumeSlider.value);
+
+        if (SaveManager.GetName() == "None" || SaveManager.GetName() == "")
+            nameInputPanel.Enter();
     }
 
     private void OnEnable()
@@ -81,5 +92,21 @@ public class MainMenuManager : MonoBehaviour
         }
 
         SceneManager.LoadScene(sceneName);
+    }
+
+    public void OpenLeaderboard()
+    {
+        soundButtonActive = false;
+        leaderboardClose.gameObject.SetActive(true);
+
+        leaderbaordPanel.SetBool("Open", true);
+    }
+
+    public void CloseLeaderboard()
+    {
+        soundButtonActive = true;
+        leaderboardClose.gameObject.SetActive(false);
+
+        leaderbaordPanel.SetBool("Open", false);
     }
 }
