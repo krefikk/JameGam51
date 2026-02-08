@@ -113,7 +113,7 @@ public class PlayerStats : MonoBehaviour
 
     public void TakeDamage(int amount = 1, bool drowning = false)
     {
-        if (state.invinsible && !drowning)
+        if (state.invinsible)
             return;
 
         state.invinsible = true;

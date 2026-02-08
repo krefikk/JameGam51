@@ -32,6 +32,7 @@ public class GameplayAudio : MonoBehaviour
     private int lastDamageIndex = -1;
     private int lastBubbleIndex = -1;
 
+    private AudioSource heartbeatSource;
     private bool oxygenHigh = true;
 
     private void Start()
@@ -39,6 +40,25 @@ public class GameplayAudio : MonoBehaviour
         StartCoroutine(PlayMX());
         AudioManager.master.SFX.PlayLoop(bG);
         SetupButtons();
+
+        SetupHeartbeatSource();
+    }
+
+    private void SetupHeartbeatSource()
+    {
+        if (heartbeat != null)
+        {
+            heartbeatSource = gameObject.AddComponent<AudioSource>();
+            heartbeatSource.clip = heartbeat;
+            heartbeatSource.loop = true;
+            heartbeatSource.playOnAwake = false;
+
+            heartbeatSource.volume = 1f;
+            heartbeatSource.pitch = 1f;
+
+            if (AudioManager.master != null && AudioManager.master.SFXMixer != null)
+                heartbeatSource.outputAudioMixerGroup = AudioManager.master.SFXMixer;
+        }
     }
 
     private void SetupButtons()
@@ -103,6 +123,11 @@ public class GameplayAudio : MonoBehaviour
             {
                 AudioManager.master.SFX.PlayPausable(playerSwim);
             }
+
+            AudioSource currentSource = AudioManager.master.SFX.pausableSource;
+            if (currentSource != null && currentSource.clip == playerSwim)
+                currentSource.time = Random.Range(0f, currentSource.clip.length);
+
             AudioManager.master.SFX.UnPausePausable();
         }
 
@@ -114,17 +139,17 @@ public class GameplayAudio : MonoBehaviour
         if (UIManager.Instance.OxygenLow && oxygenHigh)
         {
             oxygenHigh = false;
-            if (AudioManager.master.SFX.pausableSource == null)
-            {
-                AudioManager.master.SFX.PlayPausable(heartbeat);
-            }
-            AudioManager.master.SFX.UnPausePausable();
+
+            if (heartbeatSource != null && !heartbeatSource.isPlaying)
+                heartbeatSource.Play();
         }
 
-        if (!oxygenHigh && !UIManager.Instance.OxygenLow)
+        if (!UIManager.Instance.OxygenLow && !oxygenHigh)
         {
             oxygenHigh = true;
-            AudioManager.master.SFX.PausePausable();
+
+            if (heartbeatSource != null && heartbeatSource.isPlaying)
+                heartbeatSource.Stop();
         }
     }
 
