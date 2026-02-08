@@ -16,6 +16,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider oxygenBar;
     [SerializeField] private TextMeshProUGUI oxygenPercent;
     private bool canChangeOxygen = false;
+    public bool OxygenLow = false;
 
     [Header("Timer")]
     [SerializeField] private TextMeshProUGUI timerMesh;
@@ -100,6 +101,11 @@ public class UIManager : MonoBehaviour
 
         oxygenBar.value = filled / capacity;
         oxygenPercent.text = Mathf.FloorToInt(oxygenBar.value * 100).ToString() + "%";
+
+        if (oxygenBar.value <= 0.2f)
+            OxygenLow = true;
+        else
+            OxygenLow = false;
     }
 
     private void IncreaseTimer()
