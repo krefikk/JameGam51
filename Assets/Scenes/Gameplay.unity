@@ -2335,6 +2335,10 @@ PrefabInstance:
       propertyPath: sFXMixer
       value: 
       objectReference: {fileID: -453500633034652812, guid: 2bd1c825ea1c353419f38f7626c0cb4a, type: 2}
+    - target: {fileID: 8256595350342780928, guid: 83263753901fb47739d3a65f5c6c06b7, type: 3}
+      propertyPath: speakerPropellerMixer
+      value: 
+      objectReference: {fileID: 5291596494029811009, guid: 2bd1c825ea1c353419f38f7626c0cb4a, type: 2}
     - target: {fileID: 8952481285746522747, guid: 83263753901fb47739d3a65f5c6c06b7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -12000,7 +12004,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 250bb23f145884656b6e0ba67d96c7dd, type: 3}
   - {fileID: 8300000, guid: 90c877a4232064357bba8579d457d40d, type: 3}
   mine: {fileID: 8300000, guid: 3260683469d1a41daab73803824f8bf0, type: 3}
-  heartbeat: {fileID: 8300000, guid: 9c318a279aa2a47a9a151709f14e5ebd, type: 3}
+  heartbeat: {fileID: 8300000, guid: 1bef94460be2243c1aed61fe83a68cc5, type: 3}
   borderCollision: {fileID: 8300000, guid: 911ac55c1673e4650b1c24ec11baee18, type: 3}
   buttonHover: {fileID: 8300000, guid: cc141cbd9b6c84cbb8a5d357aeb16b76, type: 3}
   buttonClick: {fileID: 8300000, guid: 168d0a36f500f416dafa800209fb8309, type: 3}
