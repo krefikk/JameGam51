@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UIElements;
+using UnityEngine.EventSystems;
 
 public class AudioManager : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public SFXManager SFX { get; private set; }
 public AudioMixerGroup MXMixer => mXMixer;
 [SerializeField] private AudioMixerGroup sFXMixer;
 public AudioMixerGroup SFXMixer => sFXMixer;
+[SerializeField] private AudioMixerGroup uIMixer;
+public AudioMixerGroup UIMixer => uIMixer;
 
 
 
@@ -34,8 +37,8 @@ public int PoolSize => poolSize;
         master = this;
         DontDestroyOnLoad(gameObject);
 
-        MX = GetComponent<MXManager>();
-        SFX = GetComponent<SFXManager>();
+        MX = GetComponentInChildren<MXManager>();
+        SFX = GetComponentInChildren<SFXManager>();
     }
 
 }
