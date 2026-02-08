@@ -40,6 +40,23 @@ public class InGameManager : MonoBehaviour
         scoreManager = FindFirstObjectByType<ScoreManager>();
     }
 
+    private void OnEnable()
+    {
+        player.GetComponent<PlayerStats>().onDiverDie += EndGame;
+    }
+
+    private void OnDisable()
+    {
+        if (player != null)
+        {
+            var stats = player.GetComponent<PlayerStats>();
+            if (stats != null)
+            {
+                stats.onDiverDie -= EndGame;
+            }
+        }
+    }
+
     private void Start()
     {
         SaveOriginalPositions();
@@ -79,6 +96,8 @@ public class InGameManager : MonoBehaviour
 
         scoreTextMesh.text = "Score: " + scoreManager.CurrentScore.ToString();
         timeTextMesh.text = "Time: " + UIManager.Instance.SecondsToMinute(UIManager.Instance.Timer);
+
+        CheckAndSetScore();
 
         pausePanel.SetBool("Open", false);
         endGamePanel.SetBool("Open", true);
@@ -203,5 +222,14 @@ public class InGameManager : MonoBehaviour
             yield return null;
         }
         target.position = targetPos;
+    }
+
+    private void CheckAndSetScore()
+    {
+        if (scoreManager.CurrentScore > SaveManager.GetHighScore())
+        {
+            SaveManager.SaveGame(scoreManager.CurrentScore);
+            _ = LeaderboardManager.SetNewEntry();
+        }
     }
 }

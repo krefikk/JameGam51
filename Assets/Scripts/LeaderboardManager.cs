@@ -155,19 +155,18 @@ public class LeaderboardManager : MonoBehaviour
      */
     public static async Task SetNewEntry()
     {
-#if !UNITY_EDITOR
 	try
 		{
 			await InitializeLeaderboardServicesAsync();
 
-			PlayerData playerData = SaveManager.LoadGame();
+			SaveData playerData = SaveManager.LoadGame();
 			string name = SaveManager.GetName();
 			if (string.IsNullOrWhiteSpace(name))
-				name = $"Player_{UnityEngine.Random.Range(1000, 9999)}";
+				name = $"None_{UnityEngine.Random.Range(1000, 9999)}";
 
 			await AuthenticationService.Instance.UpdatePlayerNameAsync(name);
 
-			int score = Mathf.FloorToInt(playerData.GetHighScore());
+			int score = Mathf.FloorToInt(playerData.highScore);
 			await LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardID, score);
 		}
 		catch (LeaderboardsException e)
@@ -178,7 +177,6 @@ public class LeaderboardManager : MonoBehaviour
 		{
 			Debug.LogException(e);
 		}
-#endif
     }
 
     /*

@@ -67,6 +67,6 @@ public class PlayerState : MonoBehaviour
         GameObject speaker = Instantiate(speakerPrefab, GetComponent<PlayerStats>().speakerPosition.position, transform.rotation);
         speaker.GetComponent<Rigidbody2D>().AddForce(new Vector2(Random.Range(-1, 1), Random.Range(-1, 1)) * 3f);
 
-        GetComponent<Rigidbody2D>().gravityScale = 0.45f;
+        GetComponent<Rigidbody2D>().gravityScale = 0.15f;
     }
 }
